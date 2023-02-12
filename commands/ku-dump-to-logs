@@ -1,0 +1,15 @@
+#!/bin/bash
+
+STARTING_DIR=$PWD
+TIME_DATE=$(date +"%d-%m-%Y:%T")
+mkdir "$TIME_DATE"
+
+cd "$TIME_DATE" || exit 1
+
+kubectl get pods > pods_short_dump.txt
+kubectl describe pods > pods_dump.txt
+kubectl describe nodes > nodes_dump.txt
+kubectl get events > events_dump.txt
+# kubectl get logs > logs_dump.txt
+
+cd $STARTING_DIR || exit 1

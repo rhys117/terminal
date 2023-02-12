@@ -1,0 +1,40 @@
+#!/bin/bash
+
+SCRIPT=$(realpath $0)
+THIS_SCRIPTS_PATH=`dirname $SCRIPT`
+PARENT=$(dirname $THIS_SCRIPTS_PATH)
+GRANDPARENT=$(dirname $PARENT)
+HELP_FILES_PATH="$GRANDPARENT/notes"
+FILENAME="$1.txt"
+
+function usage {
+  echo "USAGE: self_help.sh <FILE_NAME_WITHOUT_EXT>"
+  echo "  ADD: use -add flag"
+  for entry in $HELP_FILES_PATH/*; do
+    [[ -e "$entry" ]] || break
+    FILENAME=`basename $entry`
+    printf '  %s\n' "${FILENAME%.txt}"
+  done
+}
+
+if [[ $2 == '-add' ]]; then
+  PREVIOUS_PATH=$PWD
+  cd $HELP_FILES_PATH || exit 1
+
+  if [ -f "$FILENAME" ]; then
+    $QUICK_FILE_EDITOR $FILENAME
+  else
+    touch $FILENAME
+    $QUICK_FILE_EDITOR $FILENAME
+  fi
+
+  cd $PREVIOUS_PATH || exit 1
+  exit 0
+fi
+
+if [ ! -f "$HELP_FILES_PATH/$FILENAME" ]; then
+  usage
+  exit 1
+fi
+
+cat "$HELP_FILES_PATH/$FILENAME"
