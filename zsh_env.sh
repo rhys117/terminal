@@ -66,6 +66,10 @@ function rspec-gmt {
   sudo systemsetup -settimezone Australia/Brisbane
 }
 
+function mine {
+  open -na "RubyMine.app" --args "$@"
+}
+
 # Kubernetes quick context switch
 # function ku-change-context {
 #   CONTEXT=${1:-docker-desktop}
@@ -132,17 +136,15 @@ load-nvmrc() {
 add-zsh-hook chpwd load-nvmrc
 load-nvmrc
 
-plugins=( 
-    # other plugins...
-    zsh-autosuggestions
-)
+export CLICOLOR=1
+
+plugins=(zsh-autosuggestions zsh zsh-syntax-highlighting zsh-autocomplete)
+bindkey '^ ' autosuggest-accept
+# Path to your oh-my-zsh installation.
+export ZSH="$HOME/.oh-my-zsh"
+source $ZSH/oh-my-zsh.sh
 
 setopt autocd
 
-export CLICOLOR=1
-
-source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
 # Workaround for starting blank line when opening new terminal tab
 clear
-
